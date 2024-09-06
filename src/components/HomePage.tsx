@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
     <Container maxWidth="lg">
       <Box my={4}>
         <Typography variant="h3" component="h1" gutterBottom>
-          Trending Movies
+          АРИНА АНОНИМКА ДУРА
         </Typography>
         <MovieList movies={movies} />
       </Box>
