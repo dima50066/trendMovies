@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
     <Container maxWidth="lg">
       <Box my={4}>
         <Typography variant="h3" component="h1" gutterBottom>
-          Arina Loh
+          Trending Movies
         </Typography>
         <MovieList movies={movies} />
       </Box>
