@@ -1,0 +1,31 @@
+.notFound {
+  text-align: center;
+  padding: 50px;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 50px auto;
+}
+
+.notFound h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.notFound p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.homeLink {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.homeLink:hover {
+  background-color: #0056b3;
+}
