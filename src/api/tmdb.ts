@@ -5,7 +5,7 @@ const API_KEY =
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
- export interface Movie {
+export interface Movie {
   id: number;
   title: string;
   overview: string;
@@ -47,42 +47,75 @@ const tmdbApi = axios.create({
   },
 });
 
+const handleApiError = (error: any) => {
+  // Обробка помилок API
+  console.error("API Error:", error.message || error);
+  throw new Error("Failed to fetch data from API");
+};
+
 export const fetchTrendingMovies = async (): Promise<Movie[]> => {
-  const response = await tmdbApi.get<{ results: Movie[] }>("/trending/movie/day");
-  return response.data.results;
+  try {
+    const response = await tmdbApi.get<{ results: Movie[] }>("/trending/movie/day");
+    return response.data.results;
+  } catch (error) {
+    handleApiError(error);
+    return []; // Повертаємо порожній масив у разі помилки
+  }
 };
 
 export const searchMovies = async (query: string): Promise<Movie[]> => {
-  const response = await tmdbApi.get<{ results: Movie[] }>("/search/movie", {
-    params: { query },
-  });
-  return response.data.results;
+  try {
+    const response = await tmdbApi.get<{ results: Movie[] }>("/search/movie", {
+      params: { query },
+    });
+    return response.data.results;
+  } catch (error) {
+    handleApiError(error);
+    return []; // Повертаємо порожній масив у разі помилки
+  }
 };
 
 export const fetchMovieDetails = async (movieId: number): Promise<MovieDetails> => {
-  const response = await tmdbApi.get<MovieDetails>(`/movie/${movieId}`);
-  return response.data;
+  try {
+    const response = await tmdbApi.get<MovieDetails>(`/movie/${movieId}`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    return {} as MovieDetails; // Повертаємо порожній об'єкт у разі помилки
+  }
 };
 
 export const fetchMovieCredits = async (movieId: number): Promise<CastMember[]> => {
-  const response = await tmdbApi.get<{ cast: CastMember[] }>(`/movie/${movieId}/credits`);
-  return response.data.cast;
+  try {
+    const response = await tmdbApi.get<{ cast: CastMember[] }>(`/movie/${movieId}/credits`);
+    return response.data.cast;
+  } catch (error) {
+    handleApiError(error);
+    return []; // Повертаємо порожній масив у разі помилки
+  }
 };
 
 export const fetchMovieReviews = async (movieId: number): Promise<Review[]> => {
-  const response = await tmdbApi.get<{ results: Review[] }>(`/movie/${movieId}/reviews`);
-  return response.data.results;
+  try {
+    const response = await tmdbApi.get<{ results: Review[] }>(`/movie/${movieId}/reviews`);
+    return response.data.results;
+  } catch (error) {
+    handleApiError(error);
+    return []; // Повертаємо порожній масив у разі помилки
+  }
 };
 
 export const fetchMovieTrailers = async (movieId: number): Promise<MovieTrailer[]> => {
-  const response = await tmdbApi.get<{ results: MovieTrailer[] }>(`/movie/${movieId}/videos`);
-
-  const trailers = response.data.results.filter((trailer: any) => trailer.type === "Trailer" && trailer.site === "YouTube");
-  return trailers
-
-
-
-  
+  try {
+    const response = await tmdbApi.get<{ results: MovieTrailer[] }>(`/movie/${movieId}/videos`);
+    const trailers = response.data.results.filter(
+      (trailer) => trailer.type === "Trailer" && trailer.site === "YouTube"
+    );
+    return trailers;
+  } catch (error) {
+    handleApiError(error);
+    return []; // Повертаємо порожній масив у разі помилки
+  }
 };
 
-export { IMAGE_BASE_URL  };
+export { IMAGE_BASE_URL };
