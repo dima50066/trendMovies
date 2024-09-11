@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { fetchMovieDetails, MovieDetails, fetchMovieTrailers, MovieTrailer } from "../api/tmdb";
-import { Card, CardMedia, CardContent, Typography, Box, Button, Grid } from "@mui/material";
+import { Card, CardMedia, CardContent, Typography, Box, Button, Grid, useTheme, useMediaQuery } from "@mui/material";
 
 const MovieDetailPage: React.FC = () => {
   const { movieId } = useParams<{ movieId: string }>();
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
   const [movieTrailers, setMovieTrailers] = useState<MovieTrailer[]>([]);
-  const [showTrailer, setShowTrailer] = useState(false); // Додаємо стан для рендерингу трейлера
+  const [showTrailer, setShowTrailer] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Media Query для мобільних пристроїв
 
   useEffect(() => {
     if (movieId) {
@@ -25,43 +27,45 @@ const MovieDetailPage: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  // Знаходимо перший трейлер з YouTube
   const youtubeTrailer = movieTrailers.find(trailer => trailer.site === "YouTube" && trailer.type === "Trailer");
 
   return (
-    <Box my={4}>
-      <Card sx={{ display: 'flex', flexDirection: 'row' }}>
-        <CardMedia
-          component="img"
-          alt={movieDetails.title}
-          image={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`}
-          sx={{
-            width: 300,
-            height: 'auto',
-            objectFit: 'cover'
-          }}
-        />
-        <CardContent sx={{ flex: 1 }}>
-          <Typography variant="h4" component="h2" gutterBottom>
-            {movieDetails.title}
-          </Typography>
-          <Typography variant="body1" paragraph>
-            {movieDetails.overview}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Release Date: {movieDetails.release_date}
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Runtime: {movieDetails.runtime} minutes
-          </Typography>
-          <Typography variant="body2" color="textSecondary">
-            Vote Average: {movieDetails.vote_average}
-          </Typography>
-        </CardContent>
-      </Card>
+    <Box my={4} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box sx={{ flex: 1 }}>
+        <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
+          <CardMedia
+            component="img"
+            alt={movieDetails.title}
+            image={`https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`}
+            sx={{
+              width: isMobile ? '100%' : 300,
+              height: isMobile ? 300 : 'auto',
+              objectFit: 'cover',
+              flexShrink: 0,
+            }}
+          />
+          <CardContent>
+            <Typography variant="h4" component="h2" gutterBottom>
+              {movieDetails.title}
+            </Typography>
+            <Typography variant="body1" paragraph>
+              {movieDetails.overview}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Release Date: {movieDetails.release_date}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Runtime: {movieDetails.runtime} minutes
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Vote Average: {movieDetails.vote_average}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
-      <Box my={2}>
-        <Grid container spacing={2}>
+      <Box my={2} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Grid container spacing={2} direction="column">
           <Grid item>
             <Button
               component={Link}
@@ -84,10 +88,10 @@ const MovieDetailPage: React.FC = () => {
               Reviews
             </Button>
           </Grid>
-          {youtubeTrailer && ( // Показуємо кнопку "Watch Trailer", якщо трейлер доступний
+          {youtubeTrailer && (
             <Grid item>
               <Button
-                onClick={() => setShowTrailer(!showTrailer)} // Перемикаємо показ трейлера
+                onClick={() => setShowTrailer(!showTrailer)}
                 variant="contained"
                 color="secondary"
                 fullWidth
@@ -99,11 +103,11 @@ const MovieDetailPage: React.FC = () => {
         </Grid>
       </Box>
 
-      {showTrailer && youtubeTrailer && ( // Рендеримо трейлер при натисканні кнопки
+      {showTrailer && youtubeTrailer && (
         <Box my={4}>
           <iframe
             width="100%"
-            height="400px"
+            height={isMobile ? '200px' : '400px'}
             src={`https://www.youtube-nocookie.com/embed/${youtubeTrailer.key}`}
             title="Movie Trailer"
             allowFullScreen
