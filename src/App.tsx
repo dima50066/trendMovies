@@ -1,3 +1,4 @@
+// src/App.tsx
 import React, { useState, useEffect } from "react";
 import { ThemeProvider, CssBaseline, Container, Box } from "@mui/material";
 import Navigation from "./components/Navigation";
@@ -5,6 +6,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { getCurrentTheme, setCurrentTheme, themes } from "./utils/theme";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import Loader from "./components/Loader"; // Імпортуємо Loader
 
 const HomePage = lazy(() => import("./pages/HomePage"));
 const MoviesPage = lazy(() => import("./pages/MoviesPage"));
@@ -32,7 +34,7 @@ const App: React.FC = () => {
         <Container maxWidth="lg">
           <Box my={4}>
             <Navigation onThemeToggle={handleThemeToggle} currentTheme={theme} />
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loader />}> {/* Додаємо Loader як fallback */}
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/movies" element={<MoviesPage />} />

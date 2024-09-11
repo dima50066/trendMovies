@@ -9,7 +9,7 @@ const MovieDetailPage: React.FC = () => {
   const [movieTrailers, setMovieTrailers] = useState<MovieTrailer[]>([]);
   const [showTrailer, setShowTrailer] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Media Query для мобільних пристроїв
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     if (movieId) {
