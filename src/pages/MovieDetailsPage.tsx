@@ -40,7 +40,7 @@ const MovieDetailPage: React.FC = () => {
             sx={{
               width: isMobile ? '100%' : 300,
               height: isMobile ? 300 : 'auto',
-              objectFit: 'cover',
+              objectFit: 'contain',
               flexShrink: 0,
             }}
           />
