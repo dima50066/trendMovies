@@ -19,14 +19,14 @@ const MovieList: React.FC<MovieListProps> = ({ movies }) => {
               <Link
                 to={`/movies/${movie.id}`}
                 state={{ from: location }}
-                style={{ textDecoration: 'none' }} // Щоб не було підкреслення на зображенні
+                style={{ textDecoration: 'none' }} 
               >
                 <CardMedia
                   component="img"
                   alt={movie.title}
-                  height="400" // Збільшена висота постера
+                  height="400" 
                   image={`${IMAGE_BASE_URL}${movie.poster_path}`}
-                  sx={{ objectFit: 'cover' }} // Забезпечує належне масштабування
+                  sx={{ objectFit: 'cover' }} 
                 />
               </Link>
               <CardContent>

@@ -13,6 +13,14 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
   release_date: string;
 }
 
+export interface MovieTrailer {
+  id: string | number;
+  key: string;
+  name: string;
+  type: string;
+  site: string;
+}
+
 export interface MovieDetails extends Movie {
   genres: { id: number; name: string }[];
   runtime: number;
@@ -64,6 +72,17 @@ export const fetchMovieCredits = async (movieId: number): Promise<CastMember[]> 
 export const fetchMovieReviews = async (movieId: number): Promise<Review[]> => {
   const response = await tmdbApi.get<{ results: Review[] }>(`/movie/${movieId}/reviews`);
   return response.data.results;
+};
+
+export const fetchMovieTrailers = async (movieId: number): Promise<MovieTrailer[]> => {
+  const response = await tmdbApi.get<{ results: MovieTrailer[] }>(`/movie/${movieId}/videos`);
+
+  const trailers = response.data.results.filter((trailer: any) => trailer.type === "Trailer" && trailer.site === "YouTube");
+  return trailers
+
+
+
+  
 };
 
 export { IMAGE_BASE_URL  };
