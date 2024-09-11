@@ -1,8 +1,15 @@
+// src/components/Navigation.tsx
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, IconButton } from "@mui/material";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
 
-const Navigation: React.FC = () => (
+interface NavigationProps {
+  toggleTheme: () => void;
+  isDarkMode: boolean;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ toggleTheme, isDarkMode }) => (
   <AppBar position="static">
     <Toolbar>
       <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -35,6 +42,9 @@ const Navigation: React.FC = () => (
         >
           Movies
         </Button>
+        <IconButton color="inherit" onClick={toggleTheme}>
+          {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+        </IconButton>
       </Box>
     </Toolbar>
   </AppBar>
